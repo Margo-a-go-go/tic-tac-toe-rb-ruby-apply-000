@@ -19,22 +19,18 @@ def move(board, x_as_int, character)
 end
 
 def position_taken?(board, index)
-  if board[index] == " "
-    return FALSE
-  elsif board[index] == ""
-    return FALSE
-  elsif board[index] == nil
-    return FALSE
+  if (board[index] == 'X' || board[index] == 'O')
+    return true
   else
-    return TRUE
-  end
+    return false
+ end
 end
 
 def valid_move?(board, index)
-  if index.between?(0, 8) && !position_taken?(board, index)
-    return TRUE
+  if index.between?(0, board.size-1) && !position_taken?(board, index)
+    return true
   end
-  return FALSE
+  return false
 end
 
 def turn(board)
@@ -45,12 +41,11 @@ def turn(board)
   if valid_move?(board, index)
     move(board, index, current_player(board))
     display_board(board)
-  end
-  elsif !over?(board)
+  else
     turn(board)
   end
-  display_board(board)
 end
+
 
 def turn_count(board)
   counter = 0
@@ -80,14 +75,14 @@ def won?(board)
       return win_combination
     end
   end
-  return FALSE
+  return false
 end
 
 def full?(board)
-  if board.any? {|index| index == nil || index == " "}
-    return FALSE
+  if board.any? {|index| index != "X" && index != "O" }
+    return false
   else
-    return TRUE
+    return true
   end
 end
 
@@ -116,10 +111,9 @@ def winner(board)
 end
 
 def play(board)
-  unless over?(board)
-    turn(board)
+  until over?(board)
+      turn(board)
   end
-  
   if winner(board)
    puts "Congratulations #{winner(board)}!"
   else
